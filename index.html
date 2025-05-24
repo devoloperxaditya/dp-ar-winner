@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>💰 Deposit - AR Winner</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff4d4d, #ffe6e6);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 50px;
+            color: #333;
+        }
+        h1 {
+            color: white;
+            background: #b30000;
+            padding: 15px 30px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .form-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            display: inline-block;
+            margin-top: 30px;
+        }
+        select, input {
+            padding: 12px;
+            margin: 12px;
+            font-size: 16px;
+            width: 220px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+        .btn {
+            background: linear-gradient(90deg, #b30000, #ff4d4d);
+            color: white;
+            padding: 12px 25px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDykLjwicFmPloVcHortyFUymlWleivW5g",
+            authDomain: "earn-bd-19cec.firebaseapp.com",
+            projectId: "earn-bd-19cec",
+            storageBucket: "earn-bd-19cec.appspot.com",
+            messagingSenderId: "1055880850952",
+            appId: "1:1055880850952:web:466114b7610efbd46c6bbd"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.submitDeposit = function() {
+            const method = document.getElementById('method').value;
+            const amount = document.getElementById('amount').value;
+            const trx = document.getElementById('trx').value;
+
+            if (!amount || !trx) {
+                alert('⚠️ দয়া করে সব ঘর পূরণ করুন!');
+                return;
+            }
+
+            push(ref(db, 'depositRequests'), {
+                method: method,
+                amount: amount,
+                trx: trx,
+                time: new Date().toLocaleString()
+            });
+
+            alert('✅ রিকোয়েস্ট পাঠানো হয়েছে!');
+            document.getElementById('amount').value = '';
+            document.getElementById('trx').value = '';
+        }
+    </script>
+</head>
+<body>
+    <h1>💰 Deposit Page</h1>
+
+    <div class="form-box">
+        <label>পেমেন্ট মেথড নির্বাচন করুন:</label><br>
+        <select id="method">
+            <option value="Nagad">Nagad (01625738422)</option>
+            <option value="bKash">bKash (01725469177)</option>
+        </select><br>
+
+        <input type="number" id="amount" placeholder="Amount (৳)" /><br>
+        <input type="text" id="trx" placeholder="TRX Code" /><br>
+
+        <button class="btn" onclick="submitDeposit()">Submit Request</button>
+    </div>
+</body>
+</html>
